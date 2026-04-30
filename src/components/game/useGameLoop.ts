@@ -391,5 +391,17 @@ export function useGameLoop(canvasRef: React.RefObject<HTMLCanvasElement>) {
     return () => cancelAnimationFrame(rafRef.current);
   }, [spawnEnemy, shoot]);
 
-  return { displayState };
+  const switchWeapon = useCallback(() => {
+    const s = stateRef.current;
+    if (s.gameState !== 'playing') return;
+    s.weaponIndex = (s.weaponIndex + 1) % 3;
+    s.weapon = WEAPONS[s.weaponIndex];
+    setDisplayState(d => ({ ...d, weapon: s.weapon }));
+  }, []);
+
+  const setKey = useCallback((key: string, value: boolean) => {
+    stateRef.current.keys[key] = value;
+  }, []);
+
+  return { displayState, startGame, shoot, switchWeapon, setKey };
 }

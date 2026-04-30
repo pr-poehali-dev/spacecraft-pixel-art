@@ -2,13 +2,17 @@ import { useRef } from 'react';
 import { CANVAS_W, CANVAS_H } from './game/gameTypes';
 import { useGameLoop } from './game/useGameLoop';
 import GameHUD from './game/GameHUD';
+import MobileControls from './game/MobileControls';
 
 export default function SpaceShooter() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { displayState } = useGameLoop(canvasRef);
+  const { displayState, startGame, shoot, switchWeapon, setKey } = useGameLoop(canvasRef);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-black">
+    <div
+      className="flex flex-col items-center justify-center min-h-screen bg-black"
+      style={{ overflow: 'hidden', touchAction: 'none' }}
+    >
       <GameHUD
         score={displayState.score}
         level={displayState.level}
@@ -38,11 +42,19 @@ export default function SpaceShooter() {
       </div>
 
       <div
-        className="mt-3 text-center opacity-50"
+        className="mt-3 text-center opacity-50 hidden md:block"
         style={{ fontFamily: '"Press Start 2P"', fontSize: '7px', color: '#aaaaaa', lineHeight: '1.8' }}
       >
         WASD/СТРЕЛКИ — ДВИЖЕНИЕ  |  ПРОБЕЛ — ОГОНЬ  |  Q — СМЕНА ОРУЖИЯ
       </div>
+
+      <MobileControls
+        onSetKey={setKey}
+        onShoot={shoot}
+        onSwitchWeapon={switchWeapon}
+        onStart={startGame}
+        gameState={displayState.gameState}
+      />
     </div>
   );
 }
