@@ -97,5 +97,7 @@
 
   body {
     @apply bg-background text-foreground;
+    background: #000008;
+    overflow: hidden;
   }
 }
